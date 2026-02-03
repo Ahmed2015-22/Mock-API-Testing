@@ -240,3 +240,11 @@ h - Environment Variable
 Capture the ID from the response (although the item is deleted, the ID is returned).
 ========================================================================================================================================================
 using newman run the collection 
+========================================================================================================================================================
+
+👨‍💻 Author
+**Ahmed El-Sharkawi**  
+*Junior Test Automation Engineer*
+
+🔗 [LinkedIn Profile](https://www.linkedin.com/in/ahmed-el-sharkawi/)
+🔗 [GitHub Profile](https://github.com/Ahmed2015-22)
