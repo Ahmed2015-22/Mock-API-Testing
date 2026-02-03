@@ -1,0 +1,594 @@
+{
+  "info": {
+    "_postman_id": "1999b9ac-4a45-4781-886d-efdb46a09fa3",
+    "name": "Employee",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "51977753",
+    "_collection_link": "https://go.postman.co/collection/51977753-1999b9ac-4a45-4781-886d-efdb46a09fa3?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "GET ALL EMPLOYEES",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response time is less than 800ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(800);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response has a JSON array body\", function () {\r",
+              "    pm.response.to.be.json;\r",
+              "    const json = pm.response.json();\r",
+              "    pm.expect(Array.isArray(json)).to.be.true;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response array is not empty\", function () {\r",
+              "    const json = pm.response.json();\r",
+              "    pm.expect(json.length).to.be.above(0);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Each item has required fields with correct types\", function () {\r",
+              "    const json = pm.response.json();\r",
+              "    json.forEach((item, idx) => {\r",
+              "        pm.expect(item).to.have.property(\"id\");\r",
+              "        pm.expect(item.id, `item ${idx} id type`).to.be.a(\"string\");\r",
+              "\r",
+              "        pm.expect(item).to.have.property(\"name\");\r",
+              "        pm.expect(item.name, `item ${idx} name type`).to.be.a(\"string\");\r",
+              "        pm.expect(item.name.length, `item ${idx} name length`).to.be.above(0);\r",
+              "\r",
+              "        pm.expect(item).to.have.property(\"phone\");\r",
+              "        pm.expect(item.phone, `item ${idx} phone type`).to.be.a(\"string\");\r",
+              "        pm.expect(item.phone.length, `item ${idx} phone length`).to.be.above(0);\r",
+              "\r",
+              "        pm.expect(item).to.have.property(\"salary\");\r",
+              "        pm.expect(item.salary, `item ${idx} salary type`).to.be.a(\"number\");\r",
+              "        pm.expect(item.salary, `item ${idx} salary >= 0`).to.be.at.least(0);\r",
+              "\r",
+              "        pm.expect(item).to.have.property(\"married\");\r",
+              "        pm.expect(item.married, `item ${idx} married type`).to.be.a(\"boolean\");\r",
+              "    });\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Phone number basic format for each item\", function () {\r",
+              "    const phoneRegex = /^[0-9\\s()+\\-x.]+$/; // allow digits, spaces, parentheses, +, -, x, dot\r",
+              "    const json = pm.response.json();\r",
+              "    json.forEach((item, idx) => {\r",
+              "        pm.expect(item.phone, `item ${idx} phone format`).to.match(phoneRegex);\r",
+              "    });\r",
+              "});\r",
+              "\r",
+              "pm.test(\"IDs are unique\", function () {\r",
+              "    const json = pm.response.json();\r",
+              "    const ids = json.map(i => i.id);\r",
+              "    const uniqueIds = Array.from(new Set(ids));\r",
+              "    pm.expect(uniqueIds.length, \"unique id count\").to.equal(ids.length);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Salary values are within expected range (0 - 1000000)\", function () {\r",
+              "    const json = pm.response.json();\r",
+              "    json.forEach((item, idx) => {\r",
+              "        pm.expect(item.salary, `item ${idx} salary upper bound`).to.be.at.most(1000000);\r",
+              "    });\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Employee with id '1' exists\", function () {\r",
+              "    const json = pm.response.json();\r",
+              "    const found = json.some(i => i.id === \"1\");\r",
+              "    pm.expect(found, \"employee id 1 exists\").to.be.true;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response matches expected JSON schema\", function () {\r",
+              "    const schema = {\r",
+              "        \"type\": \"array\",\r",
+              "        \"items\": {\r",
+              "            \"type\": \"object\",\r",
+              "            \"required\": [\"id\", \"name\", \"phone\", \"salary\", \"married\"],\r",
+              "            \"properties\": {\r",
+              "                \"id\": { \"type\": \"string\" },\r",
+              "                \"name\": { \"type\": \"string\" },\r",
+              "                \"phone\": { \"type\": \"string\" },\r",
+              "                \"salary\": { \"type\": \"number\" },\r",
+              "                \"married\": { \"type\": \"boolean\" }\r",
+              "            },\r",
+              "            \"additionalProperties\": true\r",
+              "        }\r",
+              "    };\r",
+              "    pm.response.to.have.jsonSchema(schema);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"No unexpected 4xx/5xx returned\", function () {\r",
+              "    const code = pm.response.code;\r",
+              "    pm.expect(code, \"status code < 500\").to.be.below(500);\r",
+              "    pm.expect(code, \"status code not 4xx\").to.be.above(199);\r",
+              "});\r",
+              "\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{BaseURL}}{{Emp_EP}}",
+          "host": [
+            "{{BaseURL}}{{Emp_EP}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "SINGLE USER",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", () => {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response is valid JSON\", () => {\r",
+              "    pm.expect(() => pm.response.json()).to.not.throw();\r",
+              "});\r",
+              "\r",
+              "const jsonData = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Has required properties\", () => {\r",
+              "    pm.expect(jsonData).to.have.property(\"id\");\r",
+              "    pm.expect(jsonData).to.have.property(\"name\");\r",
+              "    pm.expect(jsonData).to.have.property(\"phone\");\r",
+              "    pm.expect(jsonData).to.have.property(\"salary\");\r",
+              "    pm.expect(jsonData).to.have.property(\"married\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Property types are correct\", () => {\r",
+              "    pm.expect(jsonData.id).to.be.a(\"string\");\r",
+              "    pm.expect(jsonData.name).to.be.a(\"string\");\r",
+              "    pm.expect(jsonData.phone).to.be.a(\"string\");\r",
+              "    pm.expect(jsonData.salary).to.be.a(\"number\");\r",
+              "    pm.expect(jsonData.married).to.be.a(\"boolean\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"id equals '2'\", () => {\r",
+              "    pm.expect(jsonData.id).to.eql(\"2\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"salary is within expected range\", () => {\r",
+              "    pm.expect(jsonData.salary).to.be.at.least(0);\r",
+              "    pm.expect(jsonData.salary).to.be.below(1000000);\r",
+              "});\r",
+              "\r",
+              "pm.environment.set(\"employeeId\", jsonData.id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{BaseURL}}{{Emp_EP}}/2",
+          "host": [
+            "{{BaseURL}}{{Emp_EP}}"
+          ],
+          "path": [
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "CREATE NEW EMPLOYEE",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 201\", () => {\r",
+              "    pm.response.to.have.status(201);\r",
+              "});\r",
+              "pm.test(\"Response is valid JSON\", () => {\r",
+              "    pm.expect(() => pm.response.json()).to.not.throw();\r",
+              "});\r",
+              "\r",
+              "const jsonData = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Response has expected properties\", () => {\r",
+              "    pm.expect(jsonData).to.have.property(\"id\");\r",
+              "    pm.expect(jsonData).to.have.property(\"name\");\r",
+              "    pm.expect(jsonData).to.have.property(\"phone\");\r",
+              "    pm.expect(jsonData).to.have.property(\"salary\");\r",
+              "    pm.expect(jsonData).to.have.property(\"married\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Property types are correct\", () => {\r",
+              "    pm.expect(jsonData.id).to.be.a(\"string\");\r",
+              "    pm.expect(jsonData.name).to.be.a(\"string\");\r",
+              "    pm.expect(jsonData.phone).to.be.a(\"string\");\r",
+              "    pm.expect(jsonData.salary).to.be.a(\"number\");\r",
+              "    pm.expect(jsonData.married).to.be.a(\"boolean\");\r",
+              "});\r",
+              "\r",
+              "\r",
+              "\r",
+              "pm.test(\"Response time is less than 800ms\", () => {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(800);\r",
+              "});\r",
+              "\r",
+              "pm.environment.set(\"employeeId\", jsonData.id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n        \"id\": \"59\",\r\n        \"name\": \"Ahmed Talaat\",\r\n        \"phone\": \"01205688650\",\r\n        \"salary\": 123,\r\n        \"married\": true\r\n    }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{BaseURL}}{{Emp_EP}}",
+          "host": [
+            "{{BaseURL}}{{Emp_EP}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "UPDATE EMPLOYEE",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", () => {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response is valid JSON\", () => {\r",
+              "    pm.expect(() => pm.response.json()).to.not.throw();\r",
+              "});\r",
+              "\r",
+              "const jsonData = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Content-Type is application/json\", () => {\r",
+              "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response has required properties\", () => {\r",
+              "    pm.expect(jsonData).to.have.property(\"id\");\r",
+              "    pm.expect(jsonData).to.have.property(\"name\");\r",
+              "    pm.expect(jsonData).to.have.property(\"phone\");\r",
+              "    pm.expect(jsonData).to.have.property(\"salary\");\r",
+              "    pm.expect(jsonData).to.have.property(\"married\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Property types are correct\", () => {\r",
+              "    pm.expect(jsonData.id).to.be.a(\"string\");\r",
+              "    pm.expect(jsonData.name).to.be.a(\"string\");\r",
+              "    pm.expect(jsonData.phone).to.be.a(\"string\");\r",
+              "    pm.expect(jsonData.salary).to.be.a(\"number\");\r",
+              "    pm.expect(jsonData.married).to.be.a(\"boolean\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Returned values should match request body\", () => {\r",
+              "    let requestBody = {};\r",
+              "    try {\r",
+              "        requestBody = pm.request.body && pm.request.body.raw ? JSON.parse(pm.request.body.raw) : {};\r",
+              "    } catch (e) {\r",
+              "    }\r",
+              "\r",
+              "    if (Object.keys(requestBody).length > 0) {\r",
+              "        if (requestBody.id !== undefined) {\r",
+              "            pm.expect(String(jsonData.id)).to.eql(String(requestBody.id));\r",
+              "        }\r",
+              "        if (requestBody.name !== undefined) {\r",
+              "            pm.expect(jsonData.name).to.eql(requestBody.name);\r",
+              "        }\r",
+              "        if (requestBody.phone !== undefined) {\r",
+              "            pm.expect(jsonData.phone).to.eql(requestBody.phone);\r",
+              "        }\r",
+              "        if (requestBody.salary !== undefined) {\r",
+              "            pm.expect(jsonData.salary).to.eql(requestBody.salary);\r",
+              "        }\r",
+              "        if (requestBody.married !== undefined) {\r",
+              "            pm.expect(jsonData.married).to.eql(requestBody.married);\r",
+              "        }\r",
+              "    }\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response time is less than 800ms\", () => {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(800);\r",
+              "});\r",
+              "\r",
+              "if (jsonData && jsonData.id) {\r",
+              "    pm.environment.set(\"employeeId\", String(jsonData.id));\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n        \"id\": \"15\",\r\n        \"name\": \"Penny Talaat\",\r\n        \"phone\": \"917.990.4995\",\r\n        \"salary\": 25,\r\n        \"married\": true\r\n    }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{BaseURL}}{{Emp_EP}}/15",
+          "host": [
+            "{{BaseURL}}{{Emp_EP}}"
+          ],
+          "path": [
+            "15"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "EDIT EMPLOYEE",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", () => {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Content-Type is application/json\", () => {\r",
+              "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response is valid JSON\", () => {\r",
+              "    pm.expect(() => pm.response.json()).to.not.throw();\r",
+              "});\r",
+              "\r",
+              "const jsonData = pm.response.json();\r",
+              "\r",
+              "const schema = {\r",
+              "    type: \"object\",\r",
+              "    required: [\"id\", \"name\", \"phone\", \"salary\", \"married\"],\r",
+              "    additionalProperties: false,\r",
+              "    properties: {\r",
+              "        id: { type: \"string\" },\r",
+              "        name: { type: \"string\" },\r",
+              "        phone: { type: \"string\" },\r",
+              "        salary: { type: \"number\" },\r",
+              "        married: { type: \"boolean\" }\r",
+              "    }\r",
+              "};\r",
+              "\r",
+              "pm.test(\"Response matches expected schema\", () => {\r",
+              "    pm.response.to.have.jsonSchema(schema);\r",
+              "});\r",
+              "\r",
+              " pm.test(\"Response contains expected properties and types\", () => {\r",
+              "    pm.expect(jsonData).to.have.property(\"id\").that.is.a(\"string\");\r",
+              "    pm.expect(jsonData).to.have.property(\"name\").that.is.a(\"string\");\r",
+              "    pm.expect(jsonData).to.have.property(\"phone\").that.is.a(\"string\");\r",
+              "    pm.expect(jsonData).to.have.property(\"salary\").that.is.a(\"number\");\r",
+              "    pm.expect(jsonData).to.have.property(\"married\").that.is.a(\"boolean\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Returned values match request body\", () => {\r",
+              "    let requestBody = {};\r",
+              "    try {\r",
+              "        requestBody = pm.request.body && pm.request.body.raw ? JSON.parse(pm.request.body.raw) : {};\r",
+              "    } catch (err) {\r",
+              "        // ignore parse errors\r",
+              "    }\r",
+              "\r",
+              "    if (requestBody.id !== undefined) {\r",
+              "        pm.expect(String(jsonData.id)).to.eql(String(requestBody.id));\r",
+              "    }\r",
+              "    if (requestBody.name !== undefined) {\r",
+              "        pm.expect(jsonData.name).to.eql(requestBody.name);\r",
+              "    }\r",
+              "    if (requestBody.phone !== undefined) {\r",
+              "        pm.expect(jsonData.phone).to.eql(requestBody.phone);\r",
+              "    }\r",
+              "    if (requestBody.salary !== undefined) {\r",
+              "        pm.expect(jsonData.salary).to.eql(requestBody.salary);\r",
+              "    }\r",
+              "    if (requestBody.married !== undefined) {\r",
+              "        pm.expect(jsonData.married).to.eql(requestBody.married);\r",
+              "    }\r",
+              "});\r",
+              "\r",
+              " pm.test(\"Response time is below 800ms\", () => {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(800);\r",
+              "});\r",
+              "\r",
+              "if (jsonData && jsonData.id) {\r",
+              "    pm.environment.set(\"employeeId\", String(jsonData.id));\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n        \r\n        \"name\": \"Mohamed Talaat\",\r\n        \r\n        \"married\": false\r\n    }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{BaseURL}}{{Emp_EP}}/18",
+          "host": [
+            "{{BaseURL}}{{Emp_EP}}"
+          ],
+          "path": [
+            "18"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "DELETE EMPLOYEE",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// 1) Status (change 201 to 200 if your API returns 200)\r",
+              "pm.test(\"Status code is 201\", () => {\r",
+              "    pm.response.to.have.status(201);\r",
+              "});\r",
+              "\r",
+              "// 2) Content-Type\r",
+              "pm.test(\"Content-Type is application/json\", () => {\r",
+              "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+              "});\r",
+              "\r",
+              "// 3) Valid JSON\r",
+              "pm.test(\"Response is valid JSON\", () => {\r",
+              "    pm.expect(() => pm.response.json()).to.not.throw();\r",
+              "});\r",
+              "\r",
+              "const jsonData = pm.response.json();\r",
+              "\r",
+              "// 4) JSON Schema\r",
+              "const schema = {\r",
+              "    type: \"object\",\r",
+              "    required: [\"id\",\"name\",\"phone\",\"salary\",\"married\"],\r",
+              "    additionalProperties: false,\r",
+              "    properties: {\r",
+              "        id: { type: \"string\" },\r",
+              "        name: { type: \"string\" },\r",
+              "        phone: { type: \"string\" },\r",
+              "        salary: { type: \"number\" },\r",
+              "        married: { type: \"boolean\" }\r",
+              "    }\r",
+              "};\r",
+              "pm.test(\"Response matches expected schema\", () => {\r",
+              "    pm.response.to.have.jsonSchema(schema);\r",
+              "});\r",
+              "\r",
+              "// 5) Properties & types\r",
+              "pm.test(\"Response has expected properties with correct types\", () => {\r",
+              "    pm.expect(jsonData).to.have.property(\"id\").that.is.a(\"string\");\r",
+              "    pm.expect(jsonData).to.have.property(\"name\").that.is.a(\"string\");\r",
+              "    pm.expect(jsonData).to.have.property(\"phone\").that.is.a(\"string\");\r",
+              "    pm.expect(jsonData).to.have.property(\"salary\").that.is.a(\"number\");\r",
+              "    pm.expect(jsonData).to.have.property(\"married\").that.is.a(\"boolean\");\r",
+              "});\r",
+              "\r",
+              "// 6) Returned values match request body (when applicable)\r",
+              "pm.test(\"Returned values match request body\", () => {\r",
+              "    let reqBody = {};\r",
+              "    try {\r",
+              "        reqBody = pm.request.body && pm.request.body.raw ? JSON.parse(pm.request.body.raw) : {};\r",
+              "    } catch (e) { /* ignore parse errors */ }\r",
+              "\r",
+              "    if (reqBody.id !== undefined) pm.expect(String(jsonData.id)).to.eql(String(reqBody.id));\r",
+              "    if (reqBody.name !== undefined) pm.expect(jsonData.name).to.eql(reqBody.name);\r",
+              "    if (reqBody.phone !== undefined) pm.expect(jsonData.phone).to.eql(reqBody.phone);\r",
+              "    if (reqBody.salary !== undefined) pm.expect(jsonData.salary).to.eql(reqBody.salary);\r",
+              "    if (reqBody.married !== undefined) pm.expect(jsonData.married).to.eql(reqBody.married);\r",
+              "});\r",
+              "\r",
+              "// 7) Response time\r",
+              "pm.test(\"Response time is below 1000ms\", () => {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+              "});\r",
+              "\r",
+              "// 8) Save id to environment for later requests\r",
+              "if (jsonData && jsonData.id) {\r",
+              "    pm.environment.set(\"employeeId\", String(jsonData.id));\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{BaseURL}}{{Emp_EP}}/34",
+          "host": [
+            "{{BaseURL}}{{Emp_EP}}"
+          ],
+          "path": [
+            "34"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ]
+}
