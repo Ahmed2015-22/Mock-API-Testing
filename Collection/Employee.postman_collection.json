@@ -1,10 +1,9 @@
 {
   "info": {
-    "_postman_id": "1999b9ac-4a45-4781-886d-efdb46a09fa3",
+    "_postman_id": "6b7c7d46-1a43-4f58-9d8c-7f6705203b01",
     "name": "Employee",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "51977753",
-    "_collection_link": "https://go.postman.co/collection/51977753-1999b9ac-4a45-4781-886d-efdb46a09fa3?source=collection_link"
+    "_exporter_id": "41936658"
   },
   "item": [
     {
@@ -479,8 +478,8 @@
           "script": {
             "exec": [
               "// 1) Status (change 201 to 200 if your API returns 200)\r",
-              "pm.test(\"Status code is 201\", () => {\r",
-              "    pm.response.to.have.status(201);\r",
+              "pm.test(\"Status code is 200\", () => {\r",
+              "    pm.response.to.have.status(200);\r",
               "});\r",
               "\r",
               "// 2) Content-Type\r",
