@@ -4,6 +4,7 @@ This project demonstrates **API testing** using **Postman** with automated valid
 
 The APIs are provided by **MockAPI**:
 🔗 https://mockapi.io/
+💡 Note: Test data is reset after every run to ensure test reliability and repeatability.
 
 
 ## 🛠 Tools & Technologies
@@ -240,6 +241,7 @@ h - Environment Variable
 Capture the ID from the response (although the item is deleted, the ID is returned).
 ========================================================================================================================================================
 using newman run the collection 
+cmd: newman run coll_name.json -e env_name.json -r htmlextra
 ========================================================================================================================================================
 
 👨‍💻 Author
