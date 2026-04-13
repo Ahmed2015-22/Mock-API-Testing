@@ -62,11 +62,11 @@ To run this collection locally, ensure you have **Newman** installed, then use t
 ```bash
 npm install -g newman-reporter-htmlextra
 ```
-2. Run the Collection
-========================================================================================================================================================
-using newman run the collection
-cmd: newman run coll_name.json -e env_name.json -r htmlextra
-========================================================================================================================================================
+### 2. Run the Collection
+```bash
+newman run coll_name.json -e env_name.json -r htmlextra
+```
+========================================================================================
 
 👨‍💻 Author
 **Ahmed El-Sharkawi**  
