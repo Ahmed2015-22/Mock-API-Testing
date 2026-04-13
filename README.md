@@ -241,7 +241,6 @@ h - Environment Variable
 Capture the ID from the response (although the item is deleted, the ID is returned).
 ========================================================================================================================================================
 using newman run the collection
-
 cmd: newman run coll_name.json -e env_name.json -r htmlextra
 ========================================================================================================================================================
 
